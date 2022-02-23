@@ -143,4 +143,4 @@ in_vitro$Lineage <- in_vitro$orig.ident
 in_vitro$Lineage_CellType <- in_vitro$CellType_Named
 ```
 
-: toc: true toc\_depth: 2
+: toc: true toc\_depth: 2 github\_document
