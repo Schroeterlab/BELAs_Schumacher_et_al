@@ -3,6 +3,35 @@ single cell RNA-sequencing analysis of BELAs v20220223
 Max Fernkorn
 2/23/2022
 
+-   [1 BELAs, PrE Cysts and Epi Cysts dataset
+    preprocessing](#1-belas-pre-cysts-and-epi-cysts-dataset-preprocessing)
+    -   [1.1 Data loading and filtering](#11-data-loading-and-filtering)
+    -   [1.2 Basic data analysis](#12-basic-data-analysis)
+-   [2. Visualisation and Annotation of the in vitro
+    dataset](#2-visualisation-and-annotation-of-the-in-vitro-dataset)
+-   [3. Loading and normalization of the embryo dataset from Nowotschin
+    et
+    al](#3-loading-and-normalization-of-the-embryo-dataset-from-nowotschin-et-al)
+-   [4. Integration analysis](#4-integration-analysis)
+    -   [4.1 General Integration
+        approach](#41-general-integration-approach)
+    -   [4.2 Integration with all embryonic
+        lineages](#42-integration-with-all-embryonic-lineages)
+        -   [4.2.1 Integration and
+            Quantification](#421-integration-and-quantification)
+        -   [4.2.2 Ectodermal marker gene
+            expression](#422-ectodermal-marker-gene-expression)
+    -   [4.3 Integration of the Epiblast
+        lineage](#43-integration-of-the-epiblast-lineage)
+    -   [4.4 Integration of the primitive Endoderm
+        lineage](#44-integration-of-the-primitive-endoderm-lineage)
+        -   [4.4.1 Integration and
+            Quantification](#441-integration-and-quantification)
+        -   [4.4.2 Analysis of embryonic time point specific genes in
+            BELAs](#442-analysis-of-embryonic-time-point-specific-genes-in-belas)
+        -   [4.4.3 AVE marker gene
+            determination](#443-ave-marker-gene-determination)
+
 # 1 BELAs, PrE Cysts and Epi Cysts dataset preprocessing
 
 ## 1.1 Data loading and filtering
@@ -57,7 +86,7 @@ in_vitro <- RunPCA(in_vitro, verbose = FALSE)
 in_vitro <- RunUMAP(in_vitro, dims = 1:12, verbose = FALSE)
 ```
 
-# 2\. Visualisation and Annotation of the in vitro dataset
+# 2. Visualisation and Annotation of the in vitro dataset
 
 To provide an overview about the dataset a UMAP Plot with the cells
 colored according to the sample of origin was created.
@@ -143,7 +172,7 @@ in_vitro$Lineage <- in_vitro$orig.ident
 in_vitro$Lineage_CellType <- in_vitro$CellType_Named
 ```
 
-# 3\. Loading and normalization of the embryo dataset from Nowotschin et al
+# 3. Loading and normalization of the embryo dataset from Nowotschin et al
 
 Count and metadata tables of the embryonic dataset by Nowotschin et al
 can be downloaded as text files [here](https://endoderm-explorer.com)
@@ -155,8 +184,7 @@ Nowotschin et al. All following plots are generated based on only one
 replicate from the embryo dataset, since batch effects complicated the
 analysis. Which replicate is selected does not change any conclusions
 drawn. For normalization `SCTransform()` was used to ensure
-comparability with the in vitro
-dataset.
+comparability with the in vitro dataset.
 
 ``` r
 counts<-fread("./Data/sc_endoderm_all_cells_counts.csv", data.table=FALSE)
@@ -213,7 +241,7 @@ sc_endo_rep1 <- subset(sc_endo, idents = c("Lib1-1","Lib2-3","Lib3-1"))
 sc_endo_rep1 <- SCTransform(sc_endo_rep1, verbose = FALSE)
 ```
 
-# 4\. Integration analysis
+# 4. Integration analysis
 
 ## 4.1 General Integration approach
 
@@ -256,8 +284,7 @@ integrated_rep1 <- FindClusters(integrated_rep1, resolution = 0.02, verbose = FA
 
 A UMAP plot was used to visualize the annotated cell lineage of the
 embryo as well as the in vitro annotations based on clustering and
-marker gene expression from Figure
-4D.
+marker gene expression from Figure 4D.
 
 ``` r
 DimPlot(integrated_rep1, reduction = "umap", group.by = "Lineage_CellType", pt.size = 0.9, shape.by = "Origin",
@@ -270,8 +297,7 @@ DimPlot(integrated_rep1, reduction = "umap", group.by = "Lineage_CellType", pt.s
 ![](20220223_scRNAseq_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 Louvain clustering grouped the cells into three clusters, which was
-visualized in a UMAP
-plot.
+visualized in a UMAP plot.
 
 ``` r
 DimPlot(integrated_rep1, reduction = "umap", group.by = "seurat_clusters", pt.size = 0.9, shape.by = "Origin",
