@@ -1,7 +1,7 @@
-single cell RNA-sequencing analysis of BELAs v20220223
+single cell RNA-sequencing analysis of BELAs v20220329
 ================
 Max Fernkorn
-2/23/2022
+03/29/2022
 
 -   [1 BELAs, PrE Cysts and Epi Cysts dataset
     preprocessing](#1-belas-pre-cysts-and-epi-cysts-dataset-preprocessing)
@@ -62,9 +62,11 @@ read10x_filter_seurat <- function(matrix_path, sample_id){
   raw_counts <- subset(raw_counts, subset = nFeature_RNA > 4000 & percent.MT < 10)
   return(raw_counts)
 }
-path_BELAs = "./Data/BELAs/filtered_feature_bc_matrix/"
-path_EpiCysts ="./Data/EpiCysts/filtered_feature_bc_matrix/"
-path_PrECysts = "./Data/PrECysts/filtered_feature_bc_matrix/"
+path_BELAs = "./Data/BELAs/" 
+path_EpiCysts ="./Data/EpiCysts/"
+path_PrECysts = "./Data/PrECysts/"
+# Note: Processed files downloaded from GSE198780 have to be restructered and renamed: 
+# One folder per sample and delete sample prefixes from files.
 
 BELAs = read10x_filter_seurat(path_BELAs, "BELAs")
 EpiCysts = read10x_filter_seurat(path_EpiCysts, "Epi Cysts")
@@ -94,7 +96,7 @@ colored according to the sample of origin was created.
 ``` r
 # Umap plot for Figure 4B
 DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", 
-        cols = c( "BELAs"="#F8766D",  "Epi Cysts"="#D3D30B", "PrE Cysts"="#619CFF"), pt.size = 2) + 
+        cols = c( "BELAs"="#F8766D",  "Epi Cysts"="#D3D30B", "PrE Cysts"="#619CFF"), pt.size = 1.2) + 
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
@@ -116,7 +118,7 @@ in_vitro$CellType <- in_vitro@active.ident
 
 # Umap plot for Figure 4C
 DimPlot(in_vitro, reduction = "umap", cols = c("1"="#01663A","2"= "#05CED8", "3"="#4C37B5", "4"="#BC0ABC"),
-        pt.size = 2, group.by = "CellType") +
+        pt.size = 1.2, group.by = "CellType") +
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())  
 ```
 
@@ -146,7 +148,7 @@ the maximum value on the logarithmic scale.
 ``` r
 # Feature Plots for Figure 4E
 markers <- c("Gata6", "Sox17", "Dab2", "Cubn", "Pou5f1", "Sox2", "Nanog", "Fgf4")
-cutoffs<- c("2", NA, NA, NA, NA, "2", NA, "1.5")
+cutoffs<- c(NA, NA, NA, NA, NA, "2", "2", "1.5")
 
 for (i in 1:length(markers)){
   print(FeaturePlot(in_vitro, features = markers[i], slot = "data", max.cutoff=cutoffs[i], pt.size = 1) +
@@ -280,6 +282,8 @@ seperate the three main embryonic lineages.
 integrated_rep1 <- Seurat_integration_SCT(sc_endo_rep1, in_vitro)
 integrated_rep1 <- FindNeighbors(integrated_rep1, dims = 1:12)
 integrated_rep1 <- FindClusters(integrated_rep1, resolution = 0.02, verbose = FALSE) # 3 clusters for res = 0.016 to 0.039
+integrated_rep1 <- RenameIdents(integrated_rep1, '0' = '1', '1' = '2', '2' = '3')
+integrated_rep1$seurat_clusters <- integrated_rep1@active.ident
 ```
 
 A UMAP plot was used to visualize the annotated cell lineage of the
@@ -301,7 +305,7 @@ visualized in a UMAP plot.
 
 ``` r
 DimPlot(integrated_rep1, reduction = "umap", group.by = "seurat_clusters", pt.size = 0.9, shape.by = "Origin",
-        cols=c('0'='#d1b3d1','1'='#94c39b','2' = '#D8D8D8')) + 
+        cols=c('1'='#d1b3d1','2'='#94c39b','3' = '#D8D8D8')) + 
   scale_shape_manual(values = c("Embryo" = 16, "mESC" = 17)) + theme(aspect.ratio = 1) +
   theme(axis.text= element_blank(), axis.ticks = element_blank())
 ```
@@ -393,7 +397,7 @@ vitro differentiated cells.
 
 ``` r
 # Fig 5 Supp 1 A
-DimPlot(integrated_rep1_Epi, reduction = "umap", shape.by = "Origin", group.by = "Timepoint_CellType", pt.size=2,
+DimPlot(integrated_rep1_Epi, reduction = "umap", shape.by = "Origin", group.by = "Timepoint_CellType", pt.size=1.2,
         cols=c('E4.5 EPI'='#66CBE2', 'E5.5 EPI'='#95C39C', 'E6.5 EPI'='#5E7673', 
                'E6.5 Mes'='#979962','BELA-Epi'='#03673B','cyst-Epi'='#1D5E9A')) + 
   scale_shape_manual(values = c("Embryo" = 16, "mESC" = 17)) +
@@ -411,7 +415,7 @@ differences between Epi cysts and the Epi-like cells of BELAs.
 integrated_rep1_Epi <- FindNeighbors(integrated_rep1_Epi, reduction = "pca", dims = 1:30)
 integrated_rep1_Epi <- FindClusters(integrated_rep1_Epi, resolution = 0.03, verbose = FALSE)
 integrated_rep1_Epi <- RenameIdents(integrated_rep1_Epi, '0' = '2', '1' = '1', '2' = '3')
-DimPlot(integrated_rep1_Epi, reduction = "umap", shape.by = "Origin", pt.size = 2, 
+DimPlot(integrated_rep1_Epi, reduction = "umap", shape.by = "Origin", pt.size = 1.2, 
         cols=c('1'='#7CAA00', '2'='#F4766D','3'= '#C37CFF')) +
   scale_shape_manual(values = c("Embryo" = 16, "mESC" = 17)) +
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
@@ -468,7 +472,7 @@ the annotated cluster from Fig 4D for the in vitro differentiated cells.
 
 ``` r
 # Fig 5A
-DimPlot(integrated_rep1_PrE, reduction = "umap", group.by = "Timepoint_CellType", pt.size=2, shape.by = "Origin",
+DimPlot(integrated_rep1_PrE, reduction = "umap", group.by = "Timepoint_CellType", pt.size=1.2, shape.by = "Origin",
         cols=c('E4.5 PrE'='#F7D0F7', 'E5.5 emVE'='#D3ABF4', 'E5.5 exVE'='#C1B7F7', 'E6.5 emVE'='#7BA2FF', 
                'E6.5 exVE'='#B5CEFF', 'BELA-PrE'='#BC0ABC','cyst-PrE'='#4C37B5')) + 
   scale_shape_manual(values = c("Embryo" = 16, "mESC" = 17)) + theme(aspect.ratio = 1) +
@@ -488,7 +492,7 @@ integrated_rep1_PrE <- FindClusters(integrated_rep1_PrE, resolution = 0.15, verb
 integrated_rep1_PrE <- RenameIdents(integrated_rep1_PrE, '0' = '1', '1' = '2', '2' = '3', '3' = '4')
 integrated_rep1_PrE$seurat_clusters <- integrated_rep1_PrE@active.ident
 
-DimPlot(integrated_rep1_PrE, reduction = "umap", pt.size=2, shape.by = "Origin", group.by = "seurat_clusters",
+DimPlot(integrated_rep1_PrE, reduction = "umap", pt.size=1.2, shape.by = "Origin", group.by = "seurat_clusters",
         cols=c('1'='#F4766D', '2'='#7CAA00','3' = '#C37CFF', '4' = '#00BBC0')) + 
   scale_shape_manual(values = c("Embryo" = 16, "mESC" = 17)) + 
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
@@ -532,7 +536,7 @@ from the heatmap, since there were no expression values for these genes
 in the embyonic dataset.
 
 ``` r
-# Fig 5 Supp 2 A
+# Fig 5 Supp 2 B
 # Find DE genes between Agg E4.5 and Agg E6.5 exVE cells
 BELA_afin <- subset(integrated_rep1_PrE, orig.ident == "BELAs")
 Idents(BELA_afin) <- BELA_afin$seurat_clusters
@@ -550,7 +554,7 @@ heat_frame <- sc_endo_rep1_PrE@assays[["SCT"]]@scale.data[up,]
 order_for_heat <- data.frame(sc_endo_rep1_PrE$Timepoint)
 colnames(order_for_heat) <- "Timepoint"
 
-# Make a properly scaled heatmap with mean Expression and clustering based on this
+# scale heatmap with mean Expression and clustering based on this
 heat_frame_order <- log1p(data.frame(AverageExpression(sc_endo_rep1_PrE, assay = "SCT", features = up)))
 heat_frame_order <- data.frame(t(scale(t(heat_frame_order))))[,c(3,2,1)]
 colnames(heat_frame_order) <- c("Mean(E6.5)", "Mean(E5.5)","Mean(E4.5)")
@@ -569,6 +573,33 @@ pheatmap(heat_frame, scale = "none", cluster_rows = mat_cluster_rows, border_col
 ```
 
 ![](20220223_scRNAseq_analysis_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+``` r
+# Fig 5 Supp 2 A
+# Expression heatmap for downregulated genes
+heat_frame <- sc_endo_rep1_PrE@assays[["SCT"]]@scale.data[down,]
+order_for_heat <- data.frame(sc_endo_rep1_PrE$Timepoint)
+colnames(order_for_heat) <- "Timepoint"
+
+# scale heatmap with mean Expression and clustering based on this
+heat_frame_order <- log1p(data.frame(AverageExpression(sc_endo_rep1_PrE, assay = "SCT", features = down)))
+heat_frame_order <- data.frame(t(scale(t(heat_frame_order))))[,c(3,2,1)]
+colnames(heat_frame_order) <- c("Mean(E6.5)", "Mean(E5.5)","Mean(E4.5)")
+sort_hclust <- function(...) as.hclust(dendsort(as.dendrogram(...), isReverse = TRUE))
+mat_cluster_rows <- sort_hclust(hclust(dist(heat_frame_order)))
+
+ann_colors = list("Mean(E4.5)" = viridis::plasma(100), 
+                  "Mean(E5.5)" = viridis::plasma(100), 
+                  "Mean(E6.5)" = viridis::plasma(100))
+
+pheatmap(heat_frame, scale = "none", cluster_rows = mat_cluster_rows, border_color = NA,
+         annotation_col = order_for_heat, gaps_col = c(60,536), breaks = seq(-2,2,length = 100),
+         annotation_row = heat_frame_order, annotation_colors = ann_colors, cluster_cols = FALSE, 
+         col=viridis::cividis(100), number_color = "black", cellwidth = 0.05, cellheight = 8, 
+         fontsize_number = 14,show_colnames = FALSE)
+```
+
+![](20220223_scRNAseq_analysis_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
 
 These differentially expressed genes, both up- and downregulated, were
 used to investgate the correlation between embryonic timepoints. Pearson
