@@ -1,7 +1,7 @@
 # BELAs_Schumacher_et_al
 This repository contains all code used for the analysis of single cell RNA sequencing data in:
 
-Bilayered embryo-like stem cell aggregates reveal an autonomous potential of the primitive endoderm for morphogenesis and differentiation
+**Bilayered embryo-like stem cell aggregates reveal an autonomous potential of the primitive endoderm for morphogenesis and differentiation**
 
 Sina Schumacher, Max Fernkorn, Michelle Protzek, Christian Schröter
 
