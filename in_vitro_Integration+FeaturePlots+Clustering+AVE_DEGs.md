@@ -243,3 +243,67 @@ in_vitro[['SCT']] <- NULL
 # SaveH5Seurat(in_vitro, filename = "./Data/in_vitro.h5Seurat")
 # Convert("./Data/in_vitro.h5Seurat", dest = "h5ad")
 ```
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.0.4 (2021-02-15)
+    ## Platform: x86_64-apple-darwin17.0 (64-bit)
+    ## Running under: macOS Big Sur 10.16
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+    ## 
+    ## locale:
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] pheatmap_1.0.12       SeuratDisk_0.0.0.9019 ggplot2_3.4.0        
+    ## [4] SeuratObject_4.1.3    Seurat_4.1.1         
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##   [1] Rtsne_0.16            colorspace_2.1-0      deldir_1.0-6         
+    ##   [4] ellipsis_0.3.2        ggridges_0.5.4        rstudioapi_0.14      
+    ##   [7] spatstat.data_3.0-0   farver_2.1.1          leiden_0.4.3         
+    ##  [10] listenv_0.9.0         bit64_4.0.5           ggrepel_0.9.2        
+    ##  [13] RSpectra_0.16-1       fansi_1.0.4           codetools_0.2-18     
+    ##  [16] splines_4.0.4         knitr_1.42            polyclip_1.10-4      
+    ##  [19] jsonlite_1.8.4        ica_1.0-3             cluster_2.1.4        
+    ##  [22] png_0.1-8             uwot_0.1.10           shiny_1.7.4          
+    ##  [25] sctransform_0.3.5     spatstat.sparse_3.0-0 compiler_4.0.4       
+    ##  [28] httr_1.4.4            assertthat_0.2.1      Matrix_1.5-3         
+    ##  [31] fastmap_1.1.0         lazyeval_0.2.2        limma_3.46.0         
+    ##  [34] cli_3.6.0             later_1.3.0           htmltools_0.5.4      
+    ##  [37] tools_4.0.4           igraph_1.3.5          gtable_0.3.1         
+    ##  [40] glue_1.6.2            RANN_2.6.1            reshape2_1.4.4       
+    ##  [43] dplyr_1.0.10          Rcpp_1.0.10           scattermore_0.8      
+    ##  [46] vctrs_0.5.2           nlme_3.1-161          progressr_0.13.0     
+    ##  [49] lmtest_0.9-40         spatstat.random_3.1-3 xfun_0.36            
+    ##  [52] stringr_1.5.0         globals_0.16.2        mime_0.12            
+    ##  [55] miniUI_0.1.1.1        lifecycle_1.0.3       irlba_2.3.5.1        
+    ##  [58] goftest_1.2-3         future_1.30.0         MASS_7.3-58.2        
+    ##  [61] zoo_1.8-11            scales_1.2.1          spatstat.core_2.4-4  
+    ##  [64] promises_1.2.0.1      spatstat.utils_3.0-1  parallel_4.0.4       
+    ##  [67] RColorBrewer_1.1-3    yaml_2.3.7            reticulate_1.27      
+    ##  [70] pbapply_1.7-0         gridExtra_2.3         rpart_4.1.19         
+    ##  [73] stringi_1.7.12        highr_0.10            rlang_1.0.6          
+    ##  [76] pkgconfig_2.0.3       matrixStats_0.63.0    evaluate_0.20        
+    ##  [79] lattice_0.20-45       ROCR_1.0-11           purrr_1.0.1          
+    ##  [82] tensor_1.5            labeling_0.4.2        patchwork_1.1.2      
+    ##  [85] htmlwidgets_1.6.1     bit_4.0.5             cowplot_1.1.1        
+    ##  [88] tidyselect_1.2.0      parallelly_1.34.0     RcppAnnoy_0.0.20     
+    ##  [91] plyr_1.8.8            magrittr_2.0.3        R6_2.5.1             
+    ##  [94] generics_0.1.3        DBI_1.1.3             withr_2.5.0          
+    ##  [97] mgcv_1.8-41           pillar_1.8.1          fitdistrplus_1.1-8   
+    ## [100] survival_3.5-0        abind_1.4-5           sp_1.6-0             
+    ## [103] tibble_3.1.8          future.apply_1.10.0   hdf5r_1.3.8          
+    ## [106] crayon_1.5.2          KernSmooth_2.23-20    utf8_1.2.2           
+    ## [109] spatstat.geom_3.0-5   plotly_4.10.1         rmarkdown_2.20       
+    ## [112] viridis_0.6.2         grid_4.0.4            data.table_1.14.6    
+    ## [115] digest_0.6.31         xtable_1.8-4          tidyr_1.3.0          
+    ## [118] httpuv_1.6.8          munsell_0.5.0         viridisLite_0.4.1
