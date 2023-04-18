@@ -1,7 +1,7 @@
-in_vitro_FeaturePlots+Clustering+AVE_DEGs
+Analysis of the in vitro scRNAseq dataset
 ================
-Max Fernkorn
-2023-04-18
+
+### Including integration for batch correction, clustering and DEG identification and visualization
 
 Import required packages
 
@@ -79,10 +79,6 @@ DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", pt.size = 1,
 
 ![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-``` r
-# ggsave("./Plots_Fig4_and_4Sup1/20220519_Fig4B.pdf", width = 5, height = 5)
-```
-
 The expression of known VE and Epi marker genes was visualized as
 FeaturePlots.
 
@@ -95,7 +91,6 @@ for (i in 1:length(markers)){
                     max.cutoff=cutoffs[i], pt.size = 1) + 
           scale_colour_gradientn(colours = viridis::cividis(100)) + theme(aspect.ratio = 1) +
           theme(axis.text= element_blank(), axis.ticks = element_blank()))
-  # ggsave(paste("./Plots_Fig4_and_4Sup1/20220519_Fig4C_", markers[i], ".pdf", sep = ""), width = 5, height = 5)
 }
 ```
 
@@ -153,10 +148,6 @@ DimPlot(in_vitro, reduction = "umap", group.by = "Cluster", pt.size = 1,
 ```
 
 ![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
-
-``` r
-# ggsave("./", width = 5, height = 5)
-```
 
 The proportions of cells from each sample in each cluster are shown as a
 heatmap, using the custom pl_cell_frac_pheatmap_v2 function.
@@ -216,18 +207,17 @@ heat_frame <- heat_frame[,order(heat_data$orig_ident_CellType)]
 pheatmap(heat_frame, scale = "none", cluster_rows = FALSE, 
          col=viridis::cividis(100), show_colnames = FALSE,
          cluster_cols = FALSE, annotation_col = heatmap_col_anno, gaps_col = c(62,532), 
-         cellwidth = 0.2, cellheight = 10, gaps_row = 30)#,
+         cellwidth = 0.2, cellheight = 10, gaps_row = 30)
 ```
 
 ![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-#         filename = "./Plots_Fig4_and_4Sup1/20220519_Fig4F.pdf", height = 10, width = 10)
 # For horizontal heatmap
-# pheatmap(t(heat_frame), scale = "none", cluster_rows = FALSE, col=viridis::cividis(100), show_rownames = FALSE,
+# pheatmap(t(heat_frame), scale = "none", cluster_rows = FALSE, 
+#          col=viridis::cividis(100), show_rownames = FALSE,
 #          cluster_cols = FALSE, annotation_row = heatmap_col_anno, gaps_row = c(62,532), 
-#          cellwidth = 10, cellheight = 0.2, gaps_col = 30, angle_col = 90,
-#          filename = "./Plots_Fig4_and_4Sup1/20220719_Fig4F.pdf", height = 6, width = 12)
+#          cellwidth = 10, cellheight = 0.2, gaps_col = 30, angle_col = 90)
 ```
 
 For the visualization of single genes of interest, or example Nodal,
@@ -241,13 +231,8 @@ FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
 
 ![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-``` r
-# ggsave("20230201_invitro_Nodal.pdf", width = 4, height = 4)
-```
-
 Export dataset (as h5ad file) for ingest integration with in vivo
-datasets performed in python environment. Only raw counts are used for
-this.
+datasets performed in python. Only raw counts are used for this.
 
 ``` r
 in_vitro$orig_ident <- in_vitro$orig.ident
