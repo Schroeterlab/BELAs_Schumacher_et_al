@@ -1,4 +1,4 @@
-own_interaction_graph <- function(liana_trunc, save_path){
+own_interaction_graph <- function(liana_trunc){ #, save_path
   lrp <- liana_trunc[,c(3,4)]
   ligands <- unique(lrp$ligand.complex)
   receptors <- unique(lrp$receptor.complex)
@@ -40,9 +40,9 @@ own_interaction_graph <- function(liana_trunc, save_path){
   }
   
   set.seed(42)
-  pdf(save_path, 9, 9)
+  # pdf(save_path, 9, 9)
   igraph::plot.igraph(graph, vertex.size = 13, edge.width = 3, 
                       vertex.frame.color = NA, vertex.label.family = "Helvetica", 
                       layout=layout_with_fr)
-  dev.off()
+  # dev.off()
 }
