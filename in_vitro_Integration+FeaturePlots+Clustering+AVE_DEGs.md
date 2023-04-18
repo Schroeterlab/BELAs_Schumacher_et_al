@@ -1,7 +1,7 @@
-in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs
+in_vitro_FeaturePlots+Clustering+AVE_DEGs
 ================
 Max Fernkorn
-2023-04-17
+2023-04-18
 
 Import required packages
 
@@ -11,14 +11,11 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(SeuratDisk)
   library(pheatmap)
-  # library(harmony)
-  # library(cowplot)
-  # library(dendsort)
 })
 options(future.globals.maxSize = 8000 * 1024^2)
 ```
 
-Load data (CellRanger Output)
+Load in vitro data (CellRanger Output)
 
 ``` r
 read10x_filter_seurat <- function(matrix_path, sample_id){
@@ -42,20 +39,29 @@ EpiCysts = read10x_filter_seurat(path_EpiCysts, "Epi Cysts")
 VECysts = read10x_filter_seurat(path_PrECysts, "VE Cysts")
 ```
 
-Do Seurat Integration with RPCA
+To remove batch effects between sample we integrated the sample with
+RPCA based integration in Seurat.
 
 ``` r
 data.list <- list(BELAs, EpiCysts, VECysts)
-# SCTransform v2 would be more up to date, but changes the UMAP plot. Discuss what to do.
-data.list <- lapply(X = data.list, FUN = SCTransform, verbose = FALSE) #  vst.flavor = "v2",
+data.list <- lapply(X = data.list, FUN = SCTransform, verbose = FALSE)
 data.list <- lapply(X = data.list, FUN = RunPCA, verbose = FALSE)
 
-data.list.features <- SelectIntegrationFeatures(object.list = data.list, nfeatures = 3000, verbose = FALSE)
-data.list <- PrepSCTIntegration(object.list = data.list, anchor.features = data.list.features, verbose = FALSE)
+data.list.features <- SelectIntegrationFeatures(object.list = data.list, 
+                                                nfeatures = 3000, verbose = FALSE)
+data.list <- PrepSCTIntegration(object.list = data.list, 
+                                anchor.features = data.list.features, verbose = FALSE)
 anchors <- FindIntegrationAnchors(object.list = data.list, normalization.method = "SCT", 
-                                  dims = 1:30, anchor.features = data.list.features, reduction = "rpca", verbose = FALSE)
-in_vitro <- IntegrateData(anchorset = anchors, normalization.method = "SCT", dims = 1:30, verbose = FALSE)
+                                  dims = 1:30, anchor.features = data.list.features, 
+                                  reduction = "rpca", verbose = FALSE)
+in_vitro <- IntegrateData(anchorset = anchors, normalization.method = "SCT", 
+                          dims = 1:30, verbose = FALSE)
+```
 
+Run dimensionality reduction and plot UMAP annotated by sample of
+origin.
+
+``` r
 DefaultAssay(in_vitro) <- "integrated"
 in_vitro <- RunPCA(in_vitro, npcs = 30, verbose = FALSE)
 in_vitro <- RunUMAP(in_vitro, reduction = "pca", dims = 1:12, verbose = FALSE)
@@ -64,8 +70,6 @@ in_vitro <- RunUMAP(in_vitro, reduction = "pca", dims = 1:12, verbose = FALSE)
     ## Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
     ## To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'
     ## This message will be shown once per session
-
-UMAP by Sample
 
 ``` r
 DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", pt.size = 1,
@@ -79,14 +83,16 @@ DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", pt.size = 1,
 # ggsave("./Plots_Fig4_and_4Sup1/20220519_Fig4B.pdf", width = 5, height = 5)
 ```
 
-Fig 4C Feature Plots for PrE/Epi marker genes
+The expression of known VE and Epi marker genes was visualized as
+FeaturePlots.
 
 ``` r
 DefaultAssay(in_vitro) <- "SCT"
 markers <- c("Gata6", "Sox17", "Dab2", "Cubn", "Pou5f1", "Sox2", "Nanog", "Fgf4")
 cutoffs<- c(NA, NA, NA, NA, NA, "2", "2", "1.5")
 for (i in 1:length(markers)){
-  print(FeaturePlot(in_vitro, features = markers[i], slot = "data", max.cutoff=cutoffs[i], pt.size = 1) + # slot = data makes most sence, better scale than counts
+  print(FeaturePlot(in_vitro, features = markers[i], slot = "data", 
+                    max.cutoff=cutoffs[i], pt.size = 1) + 
           scale_colour_gradientn(colours = viridis::cividis(100)) + theme(aspect.ratio = 1) +
           theme(axis.text= element_blank(), axis.ticks = element_blank()))
   # ggsave(paste("./Plots_Fig4_and_4Sup1/20220519_Fig4C_", markers[i], ".pdf", sep = ""), width = 5, height = 5)
@@ -130,7 +136,7 @@ for (i in 1:length(markers)){
 
 ![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-7.png)<!-- -->![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-8.png)<!-- -->
 
-Clustering
+Clustering and visualization in UMAP space.
 
 ``` r
 DefaultAssay(in_vitro) <- "integrated"
@@ -152,19 +158,24 @@ DimPlot(in_vitro, reduction = "umap", group.by = "Cluster", pt.size = 1,
 # ggsave("./", width = 5, height = 5)
 ```
 
-Heatmap for sample fractions per cluster
+The proportions of cells from each sample in each cluster are shown as a
+heatmap, using the custom pl_cell_frac_pheatmap_v2 function.
 
 ``` r
 in_vitro$Sample <- factor(in_vitro$orig.ident, levels = c("BELAs","VE Cysts","Epi Cysts"))
-# pl_cell_frac_pheatmap_v2(in_vitro,
-#                          column_data = "Cluster",
-#                          row_data = "Sample",
-#                          include_absolute_values = TRUE, 
-#                          ratio = "column")
+source("./func_cell_fraction_heatmap.R")
+pl_cell_frac_pheatmap_v2(in_vitro,
+                         column_data = "Cluster",
+                         row_data = "Sample",
+                         include_absolute_values = TRUE,
+                         ratio = "column")
 ```
 
-Heatmap of differentially expressed genes between AVE and all other BELA
-cells
+![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+Find and visualize the differentially expressed genes between the AVE
+cluster and all other VE-like cells, including cells from BELAs and VE
+cysts.
 
 ``` r
 ####
@@ -177,27 +188,33 @@ in_vitro$orig_ident_CellType <- paste(in_vitro$Sample, in_vitro$Cluster, sep = "
 Idents(in_vitro) <- "orig_ident_CellType"
 
 # DE Genes for AVE cluster
-in_vitro <- PrepSCTFindMarkers(in_vitro) # This is a new step for multiple not connected models to get normalized
+in_vitro <- PrepSCTFindMarkers(in_vitro)
 ```
 
     ## Found 3 SCT models. Recorrecting SCT counts using minimum median counts: 58554
 
 ``` r
-AVE.dif_AVE <- FindMarkers(in_vitro, assay = "SCT", ident.1 = "BELAs: 4", ident.2 = c("BELAs: 3", "VE Cysts: 3"), only.pos = TRUE, verbose = FALSE)
-AVE.dif_PrE <- FindMarkers(in_vitro, ident.1 = c("BELAs: 3", "VE Cysts: 3"), ident.2 = "BELAs: 4", only.pos = TRUE, verbose = FALSE)
-
+AVE.dif_AVE <- FindMarkers(in_vitro, assay = "SCT", ident.1 = "BELAs: 4", 
+                           ident.2 = c("BELAs: 3", "VE Cysts: 3"), only.pos = TRUE, 
+                           verbose = FALSE)
+AVE.dif_PrE <- FindMarkers(in_vitro, ident.1 = c("BELAs: 3", "VE Cysts: 3"), 
+                           ident.2 = "BELAs: 4", only.pos = TRUE, verbose = FALSE)
 
 
 heat_data <- subset(in_vitro, idents = c("BELAs: 4", "BELAs: 3", "VE Cysts: 3"))
-heat_data$orig_ident_CellType <- factor(heat_data@active.ident, levels = c("BELAs: 4", "BELAs: 3", "VE Cysts: 3"), ordered = TRUE)
+heat_data$orig_ident_CellType <- factor(heat_data@active.ident, 
+                                        levels = c("BELAs: 4", "BELAs: 3", "VE Cysts: 3"),
+                                        ordered = TRUE)
 
-heat_data <- SCTransform(heat_data, return.only.var.genes = FALSE, verbose = FALSE) # To get SCT for all genes
+heat_data <- SCTransform(heat_data, return.only.var.genes = FALSE, verbose = FALSE) # To get SCT value for all genes
 
-genes <- c(rownames(AVE.dif_AVE[order(-AVE.dif_AVE$avg_log2FC), ])[1:30], rownames(AVE.dif_PrE[order(-AVE.dif_PrE$avg_log2FC), ])[1:30])
+genes <- c(rownames(AVE.dif_AVE[order(-AVE.dif_AVE$avg_log2FC), ])[1:30], 
+           rownames(AVE.dif_PrE[order(-AVE.dif_PrE$avg_log2FC), ])[1:30])
 heat_frame <- heat_data@assays[["SCT"]]@scale.data[genes,]
 heatmap_col_anno <- data.frame("Cluster" = heat_data$orig_ident_CellType)
 heat_frame <- heat_frame[,order(heat_data$orig_ident_CellType)]
-pheatmap(heat_frame, scale = "none", cluster_rows = FALSE, col=viridis::cividis(100), show_colnames = FALSE,
+pheatmap(heat_frame, scale = "none", cluster_rows = FALSE, 
+         col=viridis::cividis(100), show_colnames = FALSE,
          cluster_cols = FALSE, annotation_col = heatmap_col_anno, gaps_col = c(62,532), 
          cellwidth = 0.2, cellheight = 10, gaps_row = 30)#,
 ```
@@ -213,7 +230,8 @@ pheatmap(heat_frame, scale = "none", cluster_rows = FALSE, col=viridis::cividis(
 #          filename = "./Plots_Fig4_and_4Sup1/20220719_Fig4F.pdf", height = 6, width = 12)
 ```
 
-Plot Single FeaturePlots (with all cells)
+For the visualization of single genes of interest, or example Nodal,
+FeaturePlots were used.
 
 ``` r
 DefaultAssay(in_vitro) <- "SCT"
@@ -227,7 +245,9 @@ FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
 # ggsave("20230201_invitro_Nodal.pdf", width = 4, height = 4)
 ```
 
-Export dataset for integration in python
+Export dataset (as h5ad file) for ingest integration with in vivo
+datasets performed in python environment. Only raw counts are used for
+this.
 
 ``` r
 in_vitro$orig_ident <- in_vitro$orig.ident
