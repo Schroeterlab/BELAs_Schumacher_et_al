@@ -131,7 +131,7 @@ in_vitro <- RunUMAP(in_vitro, reduction = "pca", dims = 1:12, verbose = FALSE)
 ``` r
 in_vitro <- FindNeighbors(in_vitro, reduction = "pca", verbose = FALSE)
 in_vitro <- FindClusters(in_vitro, resolution = 0.2, verbose = FALSE)
-in_vitro <- RenameIdents(in_vitro, '0' = 'VE', '1' = 'Epi', '2' = 'Epi', '3' = 'AVE')
+in_vitro <- RenameIdents(in_vitro, '0' = 'VE', '1' = 'Epi', '2' = 'Epi', '3' = 'VE')
 in_vitro$Celltype <- in_vitro@active.ident
 
 Idents(in_vitro) <- "Sample"
@@ -196,12 +196,12 @@ liana_test <- liana_test %>%
 Extract and plot data for AVE to Epi interactions.
 
 ``` r
-liana_test_2 <- filter(liana_test, source =="AVE")
-liana_test_2 <- filter(liana_test_2, target =="Epi")
+liana_test_2 <- filter(liana_test, source =="Epi")
+liana_test_2 <- filter(liana_test_2, target =="VE")
 liana_test_2 <- top_n(liana_test_2, 20, desc(aggregate_rank))
 source("./func_Liana_Graph.R")
 own_interaction_graph(liana_trunc = liana_test_2, 
-                      save_path = "./20230215_LIANA_BELA_AVE->Epi_Top20_Graph.pdf")
+                      save_path = "./20230215_LIANA_BELA_Epi->VE_Top20_Graph.pdf")
 ```
 
     ## quartz_off_screen 
