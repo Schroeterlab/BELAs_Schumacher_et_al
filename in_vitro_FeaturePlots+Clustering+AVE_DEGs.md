@@ -224,10 +224,12 @@ For the visualization of single genes of interest, or example Nodal,
 FeaturePlots were used.
 
 ``` r
-# DefaultAssay(in_vitro) <- "SCT"
-# FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
-#   theme(axis.text= element_blank(), axis.ticks = element_blank())
+DefaultAssay(in_vitro) <- "SCT"
+FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
+  theme(axis.text= element_blank(), axis.ticks = element_blank())
 ```
+
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Save in_vitro for Cell-cell-communication analysis
 

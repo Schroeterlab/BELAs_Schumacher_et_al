@@ -78,7 +78,7 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_Cluster_Anno", pt.siz
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](Visualization_invitro_BELA-AVE+AVE_Thowfeequ_Comparison_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_Cluster_Anno", pt.size = 1,raster=FALSE,
@@ -86,7 +86,7 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_Cluster_Anno", pt.siz
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank(), legend.position = "none")
 ```
 
-![](Visualization_invitro_BELA-AVE+AVE_Thowfeequ_Comparison_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 1,raster=FALSE,
@@ -95,7 +95,7 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](Visualization_invitro_BELA-AVE+AVE_Thowfeequ_Comparison_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
 
 ``` r
 DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 1,raster=FALSE,
@@ -104,7 +104,7 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank(), legend.position = "none")
 ```
 
-![](Visualization_invitro_BELA-AVE+AVE_Thowfeequ_Comparison_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
 
 Plot Heatmap with fractions of cell types per cluster.
 
@@ -124,7 +124,7 @@ pl_cell_frac_pheatmap_v2(object = BELAs,
                          ratio = "column")
 ```
 
-![](Visualization_invitro_BELA-AVE+AVE_Thowfeequ_Comparison_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 # NA_tiles = data.frame(rep(FALSE,10),c(FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE))

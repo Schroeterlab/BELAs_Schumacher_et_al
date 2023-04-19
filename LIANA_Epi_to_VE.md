@@ -198,13 +198,13 @@ Extract and plot data for AVE to Epi interactions.
 ``` r
 liana_test_2 <- filter(liana_test, source =="Epi")
 liana_test_2 <- filter(liana_test_2, target =="VE")
-# write_csv(liana_test_2, "./20230418_LIANA_EpitoVE.csv")
+# write_csv2(liana_test_2, "./20230418_LIANA_EpitoVE.csv")
 liana_test_2 <- top_n(liana_test_2, 20, desc(aggregate_rank))
 source("./func_Liana_Graph.R")
 own_interaction_graph(liana_trunc = liana_test_2)
 ```
 
-![](Liana_on_Aggregates_AVEvsRest_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](LIANA_Epi_to_VE_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 sessionInfo()

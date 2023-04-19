@@ -2,6 +2,8 @@ Visualization of Integration of in vitro data with embryo data from
 Nowotschin et al., 2019
 ================
 
+Load packages
+
 ``` r
 library(Seurat)
 ```
@@ -98,7 +100,7 @@ DimPlot(integrated, reduction = "umap", group.by = "orig.ident", pt.size = 1,ras
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 DimPlot(integrated, reduction = "umap", group.by = "CellType_redefined", 
@@ -107,7 +109,7 @@ DimPlot(integrated, reduction = "umap", group.by = "CellType_redefined",
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ``` r
 DimPlot(integrated, reduction = "umap", group.by = "Timepoint_redefined", pt.size = 1) + 
@@ -117,7 +119,7 @@ DimPlot(integrated, reduction = "umap", group.by = "Timepoint_redefined", pt.siz
     ## Rasterizing points since number of points exceeds 100,000.
     ## To disable this behavior set `raster=FALSE`
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 Represent fractions of cell types as heatmaps.
 
@@ -150,7 +152,7 @@ pl_cell_frac_pheatmap_v2(object = BELAs,
                          threshold_value = 0.01)
 ```
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 pl_cell_frac_pheatmap_v2(object = VE_cysts, 
@@ -161,7 +163,7 @@ pl_cell_frac_pheatmap_v2(object = VE_cysts,
                          threshold_value = 0.01)
 ```
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 pl_cell_frac_pheatmap_v2(object = EPI_cysts, 
@@ -172,7 +174,7 @@ pl_cell_frac_pheatmap_v2(object = EPI_cysts,
                          threshold_value = 0.01)
 ```
 
-![](Visualization_invitro_Nowotschin_Comparison_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ``` r
 sessionInfo()
