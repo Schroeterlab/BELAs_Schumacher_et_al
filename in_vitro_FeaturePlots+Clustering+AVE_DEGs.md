@@ -77,7 +77,7 @@ DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", pt.size = 1,
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 The expression of known VE and Epi marker genes was visualized as
 FeaturePlots.
@@ -99,37 +99,37 @@ for (i in 1:length(markers)){
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-5.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-5.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-6.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-6.png)<!-- -->
 
     ## Scale for colour is already present.
     ## Adding another scale for colour, which will replace the existing scale.
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-7.png)<!-- -->![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-8.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-7.png)<!-- -->![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-8.png)<!-- -->
 
 Clustering and visualization in UMAP space.
 
@@ -147,7 +147,7 @@ DimPlot(in_vitro, reduction = "umap", group.by = "Cluster", pt.size = 1,
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 The proportions of cells from each sample in each cluster are shown as a
 heatmap, using the custom pl_cell_frac_pheatmap_v2 function.
@@ -162,7 +162,7 @@ pl_cell_frac_pheatmap_v2(in_vitro,
                          ratio = "column")
 ```
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 Find and visualize the differentially expressed genes between the AVE
 cluster and all other VE-like cells, including cells from BELAs and VE
@@ -210,7 +210,7 @@ pheatmap(heat_frame, scale = "none", cluster_rows = FALSE,
          cellwidth = 0.2, cellheight = 10, gaps_row = 30)
 ```
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 # For horizontal heatmap
@@ -224,12 +224,16 @@ For the visualization of single genes of interest, or example Nodal,
 FeaturePlots were used.
 
 ``` r
-DefaultAssay(in_vitro) <- "SCT"
-FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
-  theme(axis.text= element_blank(), axis.ticks = element_blank())
+# DefaultAssay(in_vitro) <- "SCT"
+# FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
+#   theme(axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](in_vitro_Integration+FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+Save in_vitro for Cell-cell-communication analysis
+
+``` r
+saveRDS(in_vitro, "./Data/in_vitro_batch_corrected.Rds")
+```
 
 Export dataset (as h5ad file) for ingest integration with in vivo
 datasets performed in python. Only raw counts are used for this.
