@@ -90,7 +90,7 @@ library(Seurat)
 
     ## Attaching SeuratObject
 
-Prepare Data for running LIANA
+Data preparation for running LIANA
 
 ``` r
 # prepare dictionary for mouse human conversion
@@ -111,11 +111,14 @@ ortholog_resource <- generate_orthologs(op_resource = op_resource,
                                         symbols_dict = symbols_dict)
 ```
 
-Load in_vitro dataset.
+Load in_vitro dataset as saved in
+in_vitro_FeaturePlots+Clustering+AVE_DEGs.md
 
 ``` r
 in_vitro <- readRDS("./Data/in_vitro_batch_corrected.Rds")
 ```
+
+Rename and group clusters into Epi and VE
 
 ``` r
 # Run LIANA with the orthologous resource
@@ -193,7 +196,9 @@ liana_test <- liana_test %>%
 # glimpse(liana_test)
 ```
 
-Extract and plot data for AVE to Epi interactions.
+Extract and plot interactions between Epi and VE. For visualization a
+wrapper *own_interaction_graph* function defined in func_Liana_Graph.R
+is used.
 
 ``` r
 liana_test_2 <- filter(liana_test, source =="Epi")

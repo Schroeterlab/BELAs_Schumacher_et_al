@@ -91,7 +91,8 @@ integrated <- RenameIdents(integrated, 'nan' = 'Embryo')
 integrated$orig.ident <- integrated@active.ident
 ```
 
-Create UMAP visualization with various annotations.
+UMAP visualization with annotated by Sample of origin, Cell type label
+or developmental stage.
 
 ``` r
 DimPlot(integrated, reduction = "umap", group.by = "orig.ident", pt.size = 1,raster=FALSE,
@@ -121,7 +122,7 @@ DimPlot(integrated, reduction = "umap", group.by = "Timepoint_redefined", pt.siz
 
 ![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
-Represent fractions of cell types as heatmaps.
+Fractions of cell types represented as heatmaps.
 
 ``` r
 # Combine labels for rare cell types:

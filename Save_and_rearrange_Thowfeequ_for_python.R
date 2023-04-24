@@ -5,7 +5,8 @@ library(ggplot2)
 library(pheatmap)
 options(future.globals.maxSize = 16000 * 1024^2)
 
-# Read in Normalized Thowfeequ data
+# Read in Normalized Thowfeequ data seperated by timepoints
+# Define new labels comprising information about both Timepoint and Cell type
 # E5.5
 Convert("./Data/Thowfeequ_dataset/Thowfeequ_norm_counts/norm_data_55.gzip.h5ad", dest = "h5seurat", overwrite = TRUE)
 Thowfeequ_E5.5_2 <- LoadH5Seurat("./Data/Thowfeequ_dataset/Thowfeequ_norm_counts/norm_data_55.gzip.h5seurat")
@@ -35,7 +36,9 @@ DimPlot(Thowfeequ_E6.25_2, group.by = "annotation")
 
 Thowfeequ <- merge(Thowfeequ_E5.5_2, Thowfeequ_E6.25_2)
 
+# Add metadata about cell origin
 Thowfeequ$orig_ident <- "Embryo"
 
+# Save Data for opening in python 
 SaveH5Seurat(Thowfeequ, filename = "./Data/Thowfeequ_dataset/Thowfeequ.h5Seurat")
 Convert("./Data/Thowfeequ_dataset/Thowfeequ.h5Seurat", dest = "h5ad")

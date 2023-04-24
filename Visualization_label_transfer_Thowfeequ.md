@@ -69,7 +69,8 @@ integrated$Embryo_Cluster_Anno[colnames(subset(integrated, Cluster == 2 | Cluste
 integrated$Embryo_CellType <- factor(integrated$Embryo_CellType)
 ```
 
-Visualize Integration in UMAP space, annotated by Cluster or Celltype.
+UMAP visualization of integration in UMAP space, annotated by Cluster or
+Celltype.
 
 ``` r
 # UMAP Plots with various annotations
@@ -106,7 +107,7 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 
 
 ![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
 
-Plot Heatmap with fractions of cell types per cluster.
+Fractions of cell types per cluster, represented as a heatmap.
 
 ``` r
 # Heatmaps for the label transfer

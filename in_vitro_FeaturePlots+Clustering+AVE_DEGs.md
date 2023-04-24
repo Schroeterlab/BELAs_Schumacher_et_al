@@ -39,8 +39,8 @@ EpiCysts = read10x_filter_seurat(path_EpiCysts, "Epi Cysts")
 VECysts = read10x_filter_seurat(path_PrECysts, "VE Cysts")
 ```
 
-To remove batch effects between sample we integrated the sample with
-RPCA based integration in Seurat.
+Remove batch effects between samples by RPCA based integration in
+Seurat.
 
 ``` r
 data.list <- list(BELAs, EpiCysts, VECysts)
@@ -79,8 +79,7 @@ DimPlot(in_vitro, reduction = "umap", group.by = "orig.ident", pt.size = 1,
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-The expression of known VE and Epi marker genes was visualized as
-FeaturePlots.
+Visualize expression of known VE and Epi marker genes as FeaturePlots.
 
 ``` r
 DefaultAssay(in_vitro) <- "SCT"
@@ -131,7 +130,7 @@ for (i in 1:length(markers)){
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-7.png)<!-- -->![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-8.png)<!-- -->
 
-Clustering and visualization in UMAP space.
+Cluster and visualize transcriptomes in UMAP space.
 
 ``` r
 DefaultAssay(in_vitro) <- "integrated"
@@ -149,8 +148,8 @@ DimPlot(in_vitro, reduction = "umap", group.by = "Cluster", pt.size = 1,
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-The proportions of cells from each sample in each cluster are shown as a
-heatmap, using the custom pl_cell_frac_pheatmap_v2 function.
+Plot proportions of cells from each sample in each cluster as a heatmap,
+using the custom pl_cell_frac_pheatmap_v2 function.
 
 ``` r
 in_vitro$Sample <- factor(in_vitro$orig.ident, levels = c("BELAs","VE Cysts","Epi Cysts"))
@@ -188,7 +187,7 @@ in_vitro <- PrepSCTFindMarkers(in_vitro)
 AVE.dif_AVE <- FindMarkers(in_vitro, assay = "SCT", ident.1 = "BELAs: 4", 
                            ident.2 = c("BELAs: 3", "VE Cysts: 3"), only.pos = TRUE, 
                            verbose = FALSE)
-AVE.dif_PrE <- FindMarkers(in_vitro, ident.1 = c("BELAs: 3", "VE Cysts: 3"), 
+AVE.dif_VE <- FindMarkers(in_vitro, ident.1 = c("BELAs: 3", "VE Cysts: 3"), 
                            ident.2 = "BELAs: 4", only.pos = TRUE, verbose = FALSE)
 
 
@@ -199,8 +198,11 @@ heat_data$orig_ident_CellType <- factor(heat_data@active.ident,
 
 heat_data <- SCTransform(heat_data, return.only.var.genes = FALSE, verbose = FALSE) # To get SCT value for all genes
 
+# write.csv2(AVE.dif_AVE[order(-AVE.dif_AVE$avg_log2FC), ], "./Table_S1_upreg_in_AVE.csv")
+# write.csv2(AVE.dif_VE[order(-AVE.dif_VE$avg_log2FC), ], "./Table_S1_upreg_in_VE.csv")
+
 genes <- c(rownames(AVE.dif_AVE[order(-AVE.dif_AVE$avg_log2FC), ])[1:30], 
-           rownames(AVE.dif_PrE[order(-AVE.dif_PrE$avg_log2FC), ])[1:30])
+           rownames(AVE.dif_VE[order(-AVE.dif_VE$avg_log2FC), ])[1:30])
 heat_frame <- heat_data@assays[["SCT"]]@scale.data[genes,]
 heatmap_col_anno <- data.frame("Cluster" = heat_data$orig_ident_CellType)
 heat_frame <- heat_frame[,order(heat_data$orig_ident_CellType)]
@@ -220,8 +222,7 @@ pheatmap(heat_frame, scale = "none", cluster_rows = FALSE,
 #          cellwidth = 10, cellheight = 0.2, gaps_col = 30, angle_col = 90)
 ```
 
-For the visualization of single genes of interest, or example Nodal,
-FeaturePlots were used.
+Visualize single genes of interest, for example Nodal, as a FeaturePlot.
 
 ``` r
 DefaultAssay(in_vitro) <- "SCT"
@@ -231,14 +232,14 @@ FeaturePlot(in_vitro, feature = "Nodal") + theme(aspect.ratio = 1) +
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-Save in_vitro for Cell-cell-communication analysis
+Save data for Cell-cell-communication analysis
 
 ``` r
-saveRDS(in_vitro, "./Data/in_vitro_batch_corrected.Rds")
+# saveRDS(in_vitro, "./Data/in_vitro_batch_corrected.Rds")
 ```
 
 Export dataset (as h5ad file) for ingest integration with in vivo
-datasets performed in python. Only raw counts are used for this.
+datasets performed in python. Use only raw counts.
 
 ``` r
 in_vitro$orig_ident <- in_vitro$orig.ident
