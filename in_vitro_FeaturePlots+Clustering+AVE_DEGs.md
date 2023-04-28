@@ -15,7 +15,8 @@ suppressPackageStartupMessages({
 options(future.globals.maxSize = 8000 * 1024^2)
 ```
 
-Load in vitro data (CellRanger Output)
+Load in vitro data (CellRanger Output, as at
+[GSE198780](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE198780))
 
 ``` r
 read10x_filter_seurat <- function(matrix_path, sample_id){
@@ -168,11 +169,7 @@ cluster and all other VE-like cells, including cells from BELAs and VE
 cysts.
 
 ``` r
-####
-### DOES NOT REPRODUCE EXACT HEATMAP ###
-#####
 # Display differentially expressed genes of AVE as heatmap
-# Problem seems to be: SCTransform before integration results in multiple models so one has to run it again. This results in small changes in list, not reproducing list of poster.
 # Prepare Data for subsetting
 in_vitro$orig_ident_CellType <- paste(in_vitro$Sample, in_vitro$Cluster, sep = ": ")
 Idents(in_vitro) <- "orig_ident_CellType"
@@ -213,14 +210,6 @@ pheatmap(heat_frame, scale = "none", cluster_rows = FALSE,
 ```
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
-``` r
-# For horizontal heatmap
-# pheatmap(t(heat_frame), scale = "none", cluster_rows = FALSE, 
-#          col=viridis::cividis(100), show_rownames = FALSE,
-#          cluster_cols = FALSE, annotation_row = heatmap_col_anno, gaps_row = c(62,532), 
-#          cellwidth = 10, cellheight = 0.2, gaps_col = 30, angle_col = 90)
-```
 
 Visualize single genes of interest, for example Nodal, as a FeaturePlot.
 
