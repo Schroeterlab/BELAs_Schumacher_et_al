@@ -11,4 +11,4 @@ The single cell sequencing data from the in vitro system described in this study
 
 The analysis of only the in vitro dataset as well as all visualizations were performed in R, the integration and label transfer based on public embryo datasets in python. The structure of the analysis and which files contain which anlysis steps is described here:
 
-![Overview_Analysis_Workflow](https://user-images.githubusercontent.com/88881773/233935939-d5b703ea-1cdb-4540-9dd4-b67338935a35.png)
+![Overview_Analysis_Workflow_1](https://user-images.githubusercontent.com/88881773/235701686-8cbd2a76-610b-4f6f-88e3-4aa3872fc047.png)
