@@ -1,15 +1,18 @@
+# The gzipped count data (from Save_Thowfeequ_for_R.ipynb) is loaded in R in order to create label based on time point and cell type.
+
+
+# Load packages
 library(Seurat)
 library(SeuratDisk)
 library(data.table)
-library(ggplot2)
-library(pheatmap)
 options(future.globals.maxSize = 16000 * 1024^2)
 
-# Read in Normalized Thowfeequ data seperated by timepoints
-# Define new labels comprising information about both Timepoint and Cell type
+# Read in Normalized Thowfeequ data separated by timepoints
+# Define new labels comprising information about both timepoint and Cell type
 # E5.5
 Convert("./Data/Thowfeequ_dataset/Thowfeequ_norm_counts/norm_data_55.gzip.h5ad", dest = "h5seurat", overwrite = TRUE)
 Thowfeequ_E5.5_2 <- LoadH5Seurat("./Data/Thowfeequ_dataset/Thowfeequ_norm_counts/norm_data_55.gzip.h5seurat")
+# Load meta data (cell type annotations), provided by the authors
 meta.data <- fread("./Data/Thowfeequ_dataset/Thowfeequ_raw_counts/metadata_AVE_modified_2.csv", data.table=FALSE)
 rownames(meta.data) <- meta.data[,1]
 meta.data[,c(1,3,4)] <- NULL
@@ -39,6 +42,6 @@ Thowfeequ <- merge(Thowfeequ_E5.5_2, Thowfeequ_E6.25_2)
 # Add metadata about cell origin
 Thowfeequ$orig_ident <- "Embryo"
 
-# Save Data for opening in python 
+# Save Data for opening in python for performing integration with ingest
 SaveH5Seurat(Thowfeequ, filename = "./Data/Thowfeequ_dataset/Thowfeequ.h5Seurat")
 Convert("./Data/Thowfeequ_dataset/Thowfeequ.h5Seurat", dest = "h5ad")

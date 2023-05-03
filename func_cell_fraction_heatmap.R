@@ -1,8 +1,4 @@
 # Function to make Heatmap with cell ratio
-# Further ideas:
-#   Possibility to modify further pHeatmap parameters directly from calling function
-#   Some multiplot feature (as for Figure 4F)
-
 pl_cell_frac_pheatmap_v2 <- function(
     object,
     column_data = "Timepoint",
