@@ -5,26 +5,16 @@ with embryo data from Thowfeequ et al., 2022
 Load Packages
 
 ``` r
+suppressPackageStartupMessages({
 library(Seurat)
-```
-
-    ## Attaching SeuratObject
-
-``` r
 library(SeuratDisk)
-```
-
-    ## Registered S3 method overwritten by 'SeuratDisk':
-    ##   method            from  
-    ##   as.sparse.H5Group Seurat
-
-``` r
 library(ggplot2)
 library(pheatmap)
 library(data.table)
+})
 ```
 
-Load data from csv files with integrated data exported in python.
+Load csv files with integrated data exported in python.
 
 ``` r
 #Load counts, meta data and dim reductions
@@ -36,7 +26,7 @@ umap <- as.matrix(fread("./Data/Thowfeequ_dataset/20230210_Ingest_invitro_BELA-V
 rownames(counts) <- counts[,1]
 Cellnames <- counts[,1]
 counts[,1] <- NULL
-counts <- data.frame(t(counts)) # This is slow
+counts <- data.frame(t(counts))
 colnames(counts) <- Cellnames
 # Get meta.data of requested conditions
 rownames(meta.data) <- meta.data[,1]
@@ -46,7 +36,7 @@ meta.data[,1] <- NULL
 rownames(umap) <- colnames(counts)
 
 #Create Seurat object with counts and meta data
-integrated <- CreateSeuratObject(counts, meta.data = meta.data) # slow again
+integrated <- CreateSeuratObject(counts, meta.data = meta.data)
 
 # Add dimensionality reduction from loaded csv (only umap)
 integrated[["UMAP"]] <- CreateDimReducObject(embeddings = umap, key = "X_umap", assay = DefaultAssay(integrated))
@@ -69,8 +59,8 @@ integrated$Embryo_Cluster_Anno[colnames(subset(integrated, Cluster == 2 | Cluste
 integrated$Embryo_CellType <- factor(integrated$Embryo_CellType)
 ```
 
-UMAP visualization of integration in UMAP space, annotated by Cluster or
-Celltype.
+Visualization of integrated data in UMAP space, annotated by cluster or
+cell type.
 
 ``` r
 # UMAP Plots with various annotations
@@ -82,32 +72,15 @@ DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_Cluster_Anno", pt.siz
 ![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
-DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_Cluster_Anno", pt.size = 1,raster=FALSE,
-        cols = c("2"="#F8766D",  "3"="#D3D30B", "Embryo"="grey")) + 
-  theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank(), legend.position = "none")
-```
-
-![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
-
-``` r
 DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 1,raster=FALSE,
         cols = c("#a6cee3","#b2df8a","#fb9a99","#fdbf6f","#cab2d6","#ffff99", "#1f78b4",
                           "#33a02c", "#e31a1c","#ff7f00", "#6a3d9a","#b15928")) + 
   theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
 ```
 
-![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
-``` r
-DimPlot(integrated, reduction = "UMAP", group.by = "Embryo_CellType", pt.size = 1,raster=FALSE,
-        cols = c("#a6cee3","#b2df8a","#fb9a99","#fdbf6f","#cab2d6", "#ffff99", "#1f78b4", 
-                          "#33a02c", "#e31a1c","#ff7f00", "#6a3d9a","#b15928")) + 
-  theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank(), legend.position = "none")
-```
-
-![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
-
-Fractions of cell types per cluster, represented as a heatmap.
+Represent fraction of cell types per cluster as a heatmap.
 
 ``` r
 # Heatmaps for the label transfer
@@ -116,6 +89,7 @@ integrated@active.ident <- integrated$orig.ident
 BELAs <- subset(integrated, idents = "BELAs")
 BELAs$Embryo_Cluster_Anno <- factor(BELAs@meta.data[["Embryo_Cluster_Anno"]])
 
+# Use pl_cell_frac_pheatmap_v2 for plotting
 source("./func_cell_fraction_heatmap.R")
 pl_cell_frac_pheatmap_v2(object = BELAs,
                          column_data = "Embryo_Cluster_Anno",
@@ -126,10 +100,6 @@ pl_cell_frac_pheatmap_v2(object = BELAs,
 ```
 
 ![](Visualization_label_transfer_Thowfeequ_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
-``` r
-# NA_tiles = data.frame(rep(FALSE,10),c(FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE))
-```
 
 ``` r
 sessionInfo()

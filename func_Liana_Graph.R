@@ -1,4 +1,5 @@
-own_interaction_graph <- function(liana_trunc){ #, save_path
+# Function to plot adjacency graph from ligand receptor interaction tables, obtained from LIANA
+own_interaction_graph <- function(liana_trunc){
   lrp <- liana_trunc[,c(3,4)]
   ligands <- unique(lrp$ligand.complex)
   receptors <- unique(lrp$receptor.complex)

@@ -4,96 +4,20 @@ Cell-cell-communication analysis with LIANA
 Load Packages
 
 ``` r
+suppressPackageStartupMessages({
 require(tidyverse)
-```
-
-    ## Loading required package: tidyverse
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ## ✔ ggplot2 3.4.0      ✔ purrr   1.0.1 
-    ## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-    ## ✔ tidyr   1.3.0      ✔ stringr 1.5.0 
-    ## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
-``` r
 require(magrittr)
+require(liana)
+require(OmnipathR)
+library(Seurat)
+})
 ```
-
-    ## Loading required package: magrittr
 
     ## Warning: package 'magrittr' was built under R version 4.0.5
-
-    ## 
-    ## Attaching package: 'magrittr'
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     set_names
-    ## 
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     extract
-
-``` r
-require(liana)
-```
-
-    ## Loading required package: liana
-
-``` r
-require(OmnipathR)
-```
-
-    ## Loading required package: OmnipathR
-    ## Loading required package: igraph
-    ## 
-    ## Attaching package: 'igraph'
-    ## 
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     as_data_frame, groups, union
-    ## 
-    ## The following objects are masked from 'package:purrr':
-    ## 
-    ##     compose, simplify
-    ## 
-    ## The following object is masked from 'package:tidyr':
-    ## 
-    ##     crossing
-    ## 
-    ## The following object is masked from 'package:tibble':
-    ## 
-    ##     as_data_frame
-    ## 
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     decompose, spectrum
-    ## 
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     union
-    ## 
-    ## Loading required package: jsonlite
-    ## 
-    ## Attaching package: 'jsonlite'
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     flatten
-
-``` r
-library(Seurat)
-```
-
-    ## Attaching SeuratObject
 
 Data preparation for running LIANA
 
 ``` r
-# prepare dictionary for mouse human conversion
 liana_path <- system.file(package = "liana")
 symbols_dict <- readRDS(file.path(liana_path, "human_mouse_orthologues.RDS"))
 head(symbols_dict)
@@ -103,7 +27,6 @@ head(symbols_dict)
     ## "Tnfrsf13c"       "Ttr"      "Dsg3"     "Fgf16"      "Dsc1"     "Itga5"
 
 ``` r
-# Here, we will convert LIANA's Consensus resource to murine symbols
 op_resource <- select_resource("Consensus")[[1]]
 
 # Generate orthologous resource
@@ -111,7 +34,7 @@ ortholog_resource <- generate_orthologs(op_resource = op_resource,
                                         symbols_dict = symbols_dict)
 ```
 
-Load in_vitro dataset as saved in
+Load in vitro dataset as saved in
 in_vitro_FeaturePlots+Clustering+AVE_DEGs.md
 
 ``` r
@@ -121,7 +44,6 @@ in_vitro <- readRDS("./Data/in_vitro_batch_corrected.Rds")
 Rename and group clusters into Epi and VE
 
 ``` r
-# Run LIANA with the orthologous resource
 DefaultAssay(in_vitro) <- "integrated"
 in_vitro <- RunPCA(in_vitro, npcs = 30, verbose = FALSE)
 in_vitro <- RunUMAP(in_vitro, reduction = "pca", dims = 1:12, verbose = FALSE)
@@ -147,7 +69,7 @@ Run LIANA
 
 ``` r
 liana_test <- liana_wrap(BELAs,
-                        resource = 'custom', # the resource has to be set to 'custom' to work with external resources
+                        resource = 'custom',
                         external_resource = ortholog_resource) # provide orthologous resource
 ```
 
@@ -175,7 +97,6 @@ liana_test <- liana_wrap(BELAs,
     ## Now Running: Cellphonedb
 
 ``` r
-# We can aggregate these results into a tibble with consensus ranks
 liana_test <- liana_test %>%
   liana_aggregate()
 ```
@@ -192,18 +113,13 @@ liana_test <- liana_test %>%
 
     ## Aggregating Ranks
 
-``` r
-# glimpse(liana_test)
-```
-
-Extract and plot interactions between Epi and VE. For visualization a
-wrapper *own_interaction_graph* function defined in func_Liana_Graph.R
-is used.
+Extract and plot interactions between Epi and VE. Use wrapper function
+*own_interaction_graph* defined in func_Liana_Graph.R for visualization.
 
 ``` r
 liana_test_2 <- filter(liana_test, source =="Epi")
 liana_test_2 <- filter(liana_test_2, target =="VE")
-# write_csv2(liana_test_2, "./20230418_LIANA_EpitoVE.csv")
+# write_csv2(liana_test_2, "./Table_S2.csv")
 liana_test_2 <- top_n(liana_test_2, 20, desc(aggregate_rank))
 source("./func_Liana_Graph.R")
 own_interaction_graph(liana_trunc = liana_test_2)

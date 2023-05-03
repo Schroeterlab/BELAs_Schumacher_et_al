@@ -228,7 +228,7 @@ Save data for Cell-cell-communication analysis
 ```
 
 Export dataset (as h5ad file) for ingest integration with in vivo
-datasets performed in python. Use only raw counts.
+datasets performed in python. Save only raw counts.
 
 ``` r
 in_vitro$orig_ident <- in_vitro$orig.ident

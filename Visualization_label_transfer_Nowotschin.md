@@ -5,22 +5,12 @@ Nowotschin et al., 2019
 Load packages
 
 ``` r
+suppressPackageStartupMessages({
 library(Seurat)
-```
-
-    ## Attaching SeuratObject
-
-``` r
 library(SeuratDisk)
-```
-
-    ## Registered S3 method overwritten by 'SeuratDisk':
-    ##   method            from  
-    ##   as.sparse.H5Group Seurat
-
-``` r
 library(ggplot2)
 library(pheatmap)
+})
 ```
 
 Load integrated data from python.
@@ -91,8 +81,7 @@ integrated <- RenameIdents(integrated, 'nan' = 'Embryo')
 integrated$orig.ident <- integrated@active.ident
 ```
 
-UMAP visualization with annotated by Sample of origin, Cell type label
-or developmental stage.
+UMAP visualization annotated by sample of origin or cell type label.
 
 ``` r
 DimPlot(integrated, reduction = "umap", group.by = "orig.ident", pt.size = 1,raster=FALSE,
@@ -112,17 +101,7 @@ DimPlot(integrated, reduction = "umap", group.by = "CellType_redefined",
 
 ![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
-``` r
-DimPlot(integrated, reduction = "umap", group.by = "Timepoint_redefined", pt.size = 1) + 
-  theme(aspect.ratio = 1, axis.text= element_blank(), axis.ticks = element_blank())
-```
-
-    ## Rasterizing points since number of points exceeds 100,000.
-    ## To disable this behavior set `raster=FALSE`
-
-![](Visualization_label_transfer_Nowotschin_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
-
-Fractions of cell types represented as heatmaps.
+Represent fraction of cell types per sample as a heatmap.
 
 ``` r
 # Combine labels for rare cell types:
@@ -144,6 +123,7 @@ heatmap_prop_integrated = data.frame(integrated@meta.data[["CellType_redefined_2
                                      integrated@meta.data[["Timepoint_redefined"]])
 heatmap_integrated_TRUE_FALSE <- (table(heatmap_prop_integrated)/sum(table(heatmap_prop_integrated)))[c(2,5,3,4,7,9,10,6,8,1),] == 0
 
+# Use pl_cell_frac_pheatmap_v2 for plotting
 source("./func_cell_fraction_heatmap.R")
 pl_cell_frac_pheatmap_v2(object = BELAs, 
                          column_data = "Timepoint_redefined", 
