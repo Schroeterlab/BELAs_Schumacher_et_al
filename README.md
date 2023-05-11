@@ -2,8 +2,8 @@
 
 This repository contains all code used for the analysis of single cell RNA sequencing data in:
 
->**Bilayered embryo-like stem cell aggregates reveal an autonomous potential of the primitive endoderm for morphogenesis and differentiation**  
->Sina Schumacher, Max Fernkorn, Michelle Marten, Christian Schröter  
+>**Tissue-intrinsic antagonism between Wnt and Nodal signaling controls AVE differentiation**  
+>Sina Schumacher, Max Fernkorn, Michelle Marten, Yung Su Kim, Ivan Bedzhov, and Christian Schröter  
 >*[Insert Link/Publication details here]*
 
 This includes the normalization, clustering, the identification of differentially expressed genes and cell-cell-communication analysis based on the dataset of BELAs, Epi cysts and VE cysts as well as the integration with the public embryo datasets.
