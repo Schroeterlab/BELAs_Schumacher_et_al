@@ -1,11 +1,15 @@
 # BELAs_Schumacher_et_al
 
-This repository contains all code used for the analysis of single cell RNA sequencing data in:
+This repository contains all code used for the analysis in:
 
->**Tissue-intrinsic antagonism between Wnt and Nodal signaling controls AVE differentiation**  
->Sina Schumacher, Max Fernkorn, Michelle Marten, Yung Su Kim, Ivan Bedzhov, and Christian Schröter  
+>**Tissue-intrinsic beta-catenin signals antagonize Nodal-driven AVE differentiation**  
+>Sina Schumacher, Max Fernkorn, Michelle Marten, Rui Chen, Yung Su Kim, Ivan Bedzhov, and Christian Schröter  
 >*[Insert Link/Publication details here]*
 
+Analysis of imaging data to quantify polarization of BELAs in:
+Polarization_analysis.R
+
+Analysis of single cell RNA sequencing data:
 This includes the normalization, clustering, the identification of differentially expressed genes and cell-cell-communication analysis based on the dataset of BELAs, Epi cysts and VE cysts as well as the integration with the public embryo datasets.
 The single cell sequencing data from the in vitro system described in this study can be found under [GSE198780](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE198780).
 
