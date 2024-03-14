@@ -131,6 +131,21 @@ for (i in 1:length(markers)){
 
 ![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-7.png)<!-- -->![](in_vitro_FeaturePlots+Clustering+AVE_DEGs_files/figure-gfm/unnamed-chunk-5-8.png)<!-- -->
 
+Visualize expression of AVE marker genes in VE subset as FeaturePlots.
+
+``` r
+markers <- c("Cer1", "Lefty1", "Sfrp1")
+cutoffs<- c("2", "2", "NA")
+for (i in 1:length(markers)){
+  print(FeaturePlot(in_vitro, features = markers[i], slot = "data", 
+                    max.cutoff=cutoffs[i], pt.size = 1.5) + 
+          xlim(0.5,15.5) +
+          ylim(-4.9,1.6) +
+          scale_colour_gradientn(colours = viridis::cividis(100)) + theme(aspect.ratio = 1) +
+          theme(axis.text= element_blank(), axis.ticks = element_blank()))
+}
+```
+
 Cluster and visualize transcriptomes in UMAP space.
 
 ``` r
